@@ -18,10 +18,25 @@ def validate_coupon():
     coupon = Coupon.query.filter_by(code=data["code"].upper()).first()
     if not coupon:
         return jsonify({"error": "Invalid coupon code"}), 404
-    if not coupon.is_valid:
-        return jsonify({"error": "This coupon has expired or is no longer valid"}), 400
+    
+    if not coupon.is_active:
+        return jsonify({"error": "This coupon is no longer active"}), 400
+    
+    if coupon.usage_limit and coupon.times_used >= coupon.usage_limit:
+        return jsonify({"error": "This coupon has reached its usage limit"}), 400
+    
+    if coupon.expires_at:
+        from datetime import datetime, timezone
+        if datetime.now(timezone.utc) > coupon.expires_at:
+            return jsonify({"error": "This coupon has expired"}), 400
 
     order_total = data.get("order_total", 0)
+    
+    if order_total < coupon.min_order_amount:
+        return jsonify({
+            "error": f"Minimum order amount of ${coupon.min_order_amount:.2f} required to use this coupon"
+        }), 400
+    
     discount = coupon.calculate_discount(order_total)
 
     return jsonify({
@@ -34,10 +49,30 @@ def validate_coupon():
 
 @coupon_bp.route("", methods=["GET"])
 @jwt_required()
-@admin_required
 def get_coupons():
-    """Get all coupons (Admin only)."""
-    coupons = Coupon.query.order_by(Coupon.created_at.desc()).all()
+    """Get coupons - users see active coupons, admin sees all."""
+    from flask_jwt_extended import get_jwt_identity
+    from app.models.user import User
+    
+    user_id = int(get_jwt_identity())
+    user = User.query.get(user_id)
+    
+    if user and user.role == "ADMIN":
+        # Admin sees all coupons
+        coupons = Coupon.query.order_by(Coupon.created_at.desc()).all()
+    else:
+        # Regular users see only active, valid coupons
+        from datetime import datetime, timezone
+        coupons = Coupon.query.filter(
+            Coupon.is_active == True,
+            db.or_(
+                Coupon.expires_at == None,
+                Coupon.expires_at > datetime.now(timezone.utc)
+            )
+        ).all()
+        # Filter out usage limit reached coupons
+        coupons = [c for c in coupons if not (c.usage_limit and c.times_used >= c.usage_limit)]
+    
     return jsonify({"coupons": [c.to_dict() for c in coupons]}), 200
 
 

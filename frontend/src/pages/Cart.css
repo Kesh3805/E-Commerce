@@ -156,28 +156,118 @@
 }
 .coupon-form button:disabled { opacity: 0.5; }
 .coupon-applied {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid #28a745;
+}
+.coupon-info {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  margin-bottom: 8px;
 }
 .coupon-badge {
-  padding: 4px 10px;
-  background: #ecfdf5;
-  color: #059669;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.88rem;
+  background: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
 }
-.coupon-savings { font-weight: 700; color: #059669; flex: 1; text-align: right; font-size: 0.95rem; }
+.coupon-savings {
+  color: #28a745;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.coupon-details {
+  color: #155724;
+  font-size: 0.85rem;
+  margin: 4px 0 8px;
+  font-weight: 500;
+}
 .btn-remove-coupon {
-  padding: 4px 8px;
-  border: none;
   background: transparent;
-  color: #64748b;
-  font-size: 0.82rem;
+  border: 2px solid #28a745;
+  color: #28a745;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+  margin-top: 8px;
+  width: 100%;
 }
-.btn-remove-coupon:hover { color: #ef4444; }
+.btn-remove-coupon:hover {
+  background: #28a745;
+  color: white;
+}
+.coupon-hint {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+.available-coupons {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.coupons-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.coupon-chip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.coupon-chip:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-color: #0ea5e9;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.chip-code {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f172a;
+  background: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px dashed #cbd5e1;
+}
+
+.chip-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.coupon-chip:hover .chip-code {
+  color: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+.coupon-chip:hover .chip-desc {
+  color: #0c4a6e;
+}
 
 /* Address */
 .address-select {

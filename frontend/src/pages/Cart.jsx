@@ -15,6 +15,7 @@ export default function Cart() {
   const [selectedAddress, setSelectedAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [placingOrder, setPlacingOrder] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
   const navigate = useNavigate();
 
   const fetchCart = async () => {
@@ -22,7 +23,13 @@ export default function Cart() {
     try {
       const res = await API.get('/cart');
       setCart(res.data.cart);
-      setTotal(res.data.total);
+      const newTotal = res.data.total;
+      setTotal(newTotal);
+      
+      // Revalidate coupon if applied and cart total changed
+      if (couponResult && couponCode) {
+        revalidateCoupon(couponCode, newTotal);
+      }
     } catch {
       toast.error('Failed to load cart');
     } finally {
@@ -43,9 +50,19 @@ export default function Cart() {
     }
   };
 
+  const fetchAvailableCoupons = async () => {
+    try {
+      const res = await API.get('/coupons');
+      setAvailableCoupons(res.data.coupons || []);
+    } catch {
+      // Silently fail if coupons can't be fetched
+    }
+  };
+
   useEffect(() => {
     fetchCart();
     fetchAddresses();
+    fetchAvailableCoupons();
   }, []);
 
   const updateQuantity = async (productId, quantity) => {
@@ -79,6 +96,18 @@ export default function Cart() {
       toast.error(err.response?.data?.error || 'Invalid coupon');
     } finally {
       setApplyingCoupon(false);
+    }
+  };
+
+  const revalidateCoupon = async (code, currentTotal) => {
+    try {
+      const res = await API.post('/coupons/validate', { code: code, order_total: currentTotal });
+      setCouponResult(res.data);
+    } catch {
+      // Coupon no longer valid, remove it
+      setCouponResult(null);
+      setCouponCode('');
+      toast.warning('Coupon removed: no longer valid for current cart total');
     }
   };
 
@@ -151,16 +180,56 @@ export default function Cart() {
               <h3>Promo Code</h3>
               {couponResult ? (
                 <div className="coupon-applied">
-                  <span className="coupon-badge">✓ {couponCode.toUpperCase()}</span>
-                  <span className="coupon-savings">−${couponResult.discount.toFixed(2)}</span>
+                  <div className="coupon-info">
+                    <span className="coupon-badge">✓ {couponCode.toUpperCase()}</span>
+                    <span className="coupon-savings">−${couponResult.discount.toFixed(2)}</span>
+                  </div>
+                  {couponResult.coupon.discount_type === 'percent' && (
+                    <p className="coupon-details">{couponResult.coupon.discount_value}% off{couponResult.coupon.max_discount ? ` (max $${couponResult.coupon.max_discount})` : ''}</p>
+                  )}
+                  {couponResult.coupon.discount_type === 'flat' && (
+                    <p className="coupon-details">${couponResult.coupon.discount_value} flat discount</p>
+                  )}
                   <button className="btn-remove-coupon" onClick={removeCoupon}>Remove</button>
                 </div>
               ) : (
                 <div className="coupon-form">
-                  <input type="text" placeholder="Enter coupon code" value={couponCode} onChange={e => setCouponCode(e.target.value)} />
-                  <button onClick={applyCoupon} disabled={applyingCoupon}>{applyingCoupon ? '...' : 'Apply'}</button>
+                  <input 
+                    type="text" 
+              
+              {!couponResult && availableCoupons.length > 0 && (
+                <div className="available-coupons">
+                  <p className="coupons-title">Available Coupons:</p>
+                  {availableCoupons.slice(0, 4).map(coupon => (
+                    <div 
+                      key={coupon.id} 
+                      className="coupon-chip"
+                      onClick={() => {
+                        setCouponCode(coupon.code);
+                        setTimeout(applyCoupon, 100);
+                      }}
+                    >
+                      <span className="chip-code">{coupon.code}</span>
+                      <span className="chip-desc">
+                        {coupon.discount_type === 'percent' 
+                          ? `${coupon.discount_value}% off` 
+                          : `$${coupon.discount_value} off`}
+                        {coupon.min_order_amount > 0 && ` on $${coupon.min_order_amount}+`}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
+                    value={couponCode} 
+                    onChange={e => setCouponCode(e.target.value.toUpperCase())}
+                    onKeyPress={e => e.key === 'Enter' && applyCoupon()}
+                  />
+                  <button onClick={applyCoupon} disabled={applyingCoupon || !couponCode.trim()}>
+                    {applyingCoupon ? '...' : 'Apply'}
+                  </button>
+                </div>
+              )}
+              <p className="coupon-hint">💡 Try: WELCOME10, SAVE20, FLAT50, SUMMER25</p>
             </div>
 
             {/* Delivery Address */}
