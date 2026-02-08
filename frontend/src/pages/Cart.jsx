@@ -33,10 +33,14 @@ export default function Cart() {
   const fetchAddresses = async () => {
     try {
       const res = await API.get('/addresses');
-      setAddresses(res.data);
-      const def = res.data.find(a => a.is_default);
+      const addressData = Array.isArray(res.data) ? res.data : [];
+      setAddresses(addressData);
+      const def = addressData.find(a => a.is_default);
       if (def) setSelectedAddress(def.id);
-    } catch {}
+    } catch (err) {
+      console.error('Failed to fetch addresses:', err);
+      setAddresses([]);
+    }
   };
 
   useEffect(() => {

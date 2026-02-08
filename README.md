@@ -312,14 +312,6 @@ This project is licensed under the MIT License.
 
 ---
 
-## 👨‍💻 Author
-
-**Kesh3805**
-- GitHub: [@Kesh3805](https://github.com/Kesh3805)
-- Repository: [E-Commerce](https://github.com/Kesh3805/E-Commerce)
-
----
-
 ## 📞 Support
 
 For issues or questions:
@@ -332,7 +324,5 @@ For issues or questions:
 <div align="center">
 
 **⭐ Star this repository if you find it helpful!**
-
-Made with ❤️ by Kesh3805
 
 </div>
