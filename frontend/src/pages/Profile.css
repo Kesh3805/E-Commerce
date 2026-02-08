@@ -1,0 +1,185 @@
+.profile-page {
+  display: flex;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 40px 60px;
+  gap: 30px;
+  min-height: 70vh;
+}
+
+/* Sidebar */
+.profile-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+.profile-avatar {
+  text-align: center;
+  padding: 30px 20px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+.avatar-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+.profile-avatar h3 { font-size: 1.1rem; color: #0f172a; }
+.profile-avatar p { font-size: 0.85rem; color: #64748b; }
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.profile-nav button {
+  padding: 14px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+.profile-nav button:hover { background: #f8fafc; color: #0f172a; }
+.profile-nav button.active {
+  background: #eef2ff;
+  color: #6366f1;
+  font-weight: 600;
+  border-left-color: #6366f1;
+}
+.profile-nav .logout-btn { color: #ef4444; }
+.profile-nav .logout-btn:hover { background: #fef2f2; }
+
+/* Content */
+.profile-content { flex: 1; }
+.content-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 30px;
+}
+.content-card h2 { font-size: 1.3rem; font-weight: 700; color: #0f172a; margin-bottom: 24px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.card-header h2 { margin-bottom: 0; }
+.btn-add-addr {
+  padding: 8px 18px;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.profile-form .form-row, .addr-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #334155;
+  margin-bottom: 6px;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus { border-color: #6366f1; }
+.form-group .disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+.btn-save {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.btn-cancel {
+  padding: 12px 28px;
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.form-actions { display: flex; gap: 12px; margin-top: 8px; }
+
+/* Address Form */
+.addr-form {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.addr-form h4 { font-size: 1.05rem; margin-bottom: 14px; color: #0f172a; }
+
+/* Address Cards */
+.addresses-list { display: flex; flex-direction: column; gap: 14px; }
+.no-addr { text-align: center; color: #94a3b8; padding: 30px; }
+.addr-card {
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+.addr-card.default { border-color: #6366f1; background: #fafafe; }
+.addr-header { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.addr-label { font-weight: 700; font-size: 0.9rem; color: #0f172a; text-transform: uppercase; }
+.default-badge {
+  font-size: 0.75rem;
+  background: #eef2ff;
+  color: #6366f1;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.addr-name { font-weight: 600; color: #0f172a; }
+.addr-card p { color: #475569; font-size: 0.9rem; line-height: 1.5; margin: 0; }
+.addr-actions { display: flex; gap: 10px; margin-top: 12px; }
+.addr-actions button {
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #475569;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.addr-actions button:hover { border-color: #6366f1; color: #6366f1; }
+.addr-actions button.del:hover { border-color: #ef4444; color: #ef4444; }
+
+@media (max-width: 700px) {
+  .profile-page { flex-direction: column; padding: 16px; }
+  .profile-sidebar { width: 100%; }
+  .profile-nav { flex-direction: row; }
+  .profile-form .form-row, .addr-form .form-row { grid-template-columns: 1fr; }
+}
